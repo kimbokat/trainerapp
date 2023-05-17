@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { AgGridReact } from "ag-grid-react";
+import { format } from "date-fns";
 import { CUSTOMER_API, TRAININGS_API } from "../constants";
+import { CustomerList } from "./CustomerList"
 
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-material.css";
 
 
-function TrainingsList() {
+function TrainingsList({customers}) {
   const [trainings, setTrainings] = useState([]);
 
   
@@ -15,9 +17,16 @@ function TrainingsList() {
     { field: "date", sortable: true, filter: true },
     { field: "duration (minutes)", sortable: true, filter: true },
     { field: "activity", sortable: true, filter: true },
-    { field: "Customer", sortable: true, filter: true },
-    
-     ]);
+    { 
+      field: "customerName", 
+      headerName: "Customer", 
+      sortable: true, 
+      filter: true,
+      valueGetter: (params) => {
+        return params.data.firstName + params.data.lastName;
+      },
+    },
+  ]);
 
   useEffect(() => {
     getTrainings();
@@ -27,8 +36,11 @@ function TrainingsList() {
     fetch(TRAININGS_API)
       .then((response) => response.json())
       .then((data) => {
-        (console.log(data.content[0]));
-        setTrainings(data.content)
+        const formattedData = data.content.map((training) => {
+        const formattedDate = format(new Date(training.date), "dd.MM.yyyy");
+        return { ...training, date: formattedDate };
+      });
+      setTrainings(formattedData);
       })
       .catch((err) => console.error(err));
   };
@@ -44,6 +56,7 @@ function TrainingsList() {
           rowData={trainings}
           columnDefs={columnDefs}
         ></AgGridReact>
+      
       </div>
  
   );

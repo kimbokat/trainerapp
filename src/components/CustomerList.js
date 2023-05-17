@@ -29,7 +29,6 @@ function CustomerList() {
     fetch(CUSTOMER_API)
       .then((response) => response.json())
       .then((data) => {
-        (console.log(data.content[0]));
         setCustomers(data.content)
       })
       .catch((err) => console.error(err));
