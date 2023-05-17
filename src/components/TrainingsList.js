@@ -37,7 +37,7 @@ function TrainingsList({customers}) {
       .then((response) => response.json())
       .then((data) => {
         const formattedData = data.content.map((training) => {
-        const formattedDate = format(new Date(training.date), "dd.MM.yyyy");
+        const formattedDate = format(new Date(training.date), "dd.MM.yyyy hh:mm");
         return { ...training, date: formattedDate };
       });
       setTrainings(formattedData);
