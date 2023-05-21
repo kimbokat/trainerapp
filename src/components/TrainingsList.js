@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { AgGridReact } from "ag-grid-react";
 import { format } from "date-fns";
-import { TRAININGS_API } from "../constants";
+import { GET_TRAININGS_API, TRAININGS_API } from "../constants";
+import Snackbar from "@mui/material/Snackbar";
+import DeleteIcon from "@mui/icons-material/Delete";
+import IconButton from "@mui/material/IconButton";
 
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-material.css";
 
 function TrainingsList() {
   const [trainings, setTrainings] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [msg, setMsg] = useState("");
 
   const [columnDefs] = useState([
     { field: "date", sortable: true, filter: true },
@@ -24,6 +29,13 @@ function TrainingsList() {
       sortable: true,
       filter: true,
     },
+    {
+      cellRenderer: (params) => (
+        <IconButton color="error" onClick={() => deleteTraining(params)}>
+          <DeleteIcon />
+        </IconButton>
+      ),
+    },
   ]);
 
   useEffect(() => {
@@ -31,10 +43,11 @@ function TrainingsList() {
   }, []);
 
   const getTrainings = () => {
-    fetch(TRAININGS_API)
+    fetch(GET_TRAININGS_API)
       .then((response) => response.json())
       .then((data) => {
         const formattedData = data.map((training) => {
+          console.log(data)
           const formattedDate = format(
             new Date(training.date),
             "dd.M.yyyy HH:mm"
@@ -51,7 +64,24 @@ function TrainingsList() {
       .catch((err) => console.error(err));
   };
 
+  const deleteTraining = (params) => {
+    if (window.confirm("Delete training?")) {
+      fetch(TRAININGS_API + params.data.id, { method: "DELETE" })
+        .then((response) => {
+          if (response.ok) {
+            setMsg("Training deleted successfully");
+            setOpen(true);
+            getTrainings();
+          } else {
+            alert("Something went wrong in deletion: " + response.status);
+          }
+        })
+        .catch((err) => console.error(err));
+    }
+  };
+
   return (
+    <>
     <div
       className="ag-theme-material"
       style={{ height: 600, width: "90%", margin: "auto" }}
@@ -63,6 +93,13 @@ function TrainingsList() {
         columnDefs={columnDefs}
       ></AgGridReact>
     </div>
+    <Snackbar
+    open={open}
+    autoHideDuration={3000}
+    onClose={() => setOpen(false)}
+    message={msg}
+  />
+</>
   );
 }
 
