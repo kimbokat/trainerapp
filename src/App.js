@@ -6,10 +6,11 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import Stack from '@mui/material/Stack';
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
-import "./App.css";
+// import "./App.css";
 
 function App() {
   return (
@@ -18,9 +19,7 @@ function App() {
         <Toolbar variant="dense">
           <Typography variant="h6">Trainer App</Typography>
 
-          <nav
-            
-          >
+          <Stack direction="row" spacing={2} margin="auto">
             <Button variant="contained" color="inherit" size="large" href="/">
               Customers
             </Button>
@@ -33,7 +32,8 @@ function App() {
             >
               Trainings
             </Button>
-          </nav>
+          </Stack>
+  
         </Toolbar>
       </AppBar>
       <BrowserRouter>
