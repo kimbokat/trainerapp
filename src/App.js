@@ -6,6 +6,7 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 import "./App.css";
@@ -16,36 +17,31 @@ function App() {
       <AppBar position="static">
         <Toolbar variant="dense">
           <Typography variant="h6">Trainer App</Typography>
-          <BrowserRouter>
-            <nav>
-              <div>
-                <Button
-                  variant="contained"
-                  color="inherit"
-                  size="large"
-                  href="/"
-                >
-                  Customers
-                </Button>
-              </div>
-              <div>
-                <Button
-                  variant="contained"
-                  size="large"
-                  color="inherit"
-                  href="/trainings"
-                >
-                  Trainings
-                </Button>
-              </div>
-            </nav>
-            <Routes>
-              <Route path="/" element={<CustomerList />} />
-              <Route path="/trainings" element={<TrainingsList />} />
-            </Routes>
-          </BrowserRouter>
+
+          <nav
+            
+          >
+            <Button variant="contained" color="inherit" size="large" href="/">
+              Customers
+            </Button>
+
+            <Button
+              variant="contained"
+              size="large"
+              color="inherit"
+              href="/trainings"
+            >
+              Trainings
+            </Button>
+          </nav>
         </Toolbar>
       </AppBar>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<CustomerList />} />
+          <Route path="/trainings" element={<TrainingsList />} />
+        </Routes>
+      </BrowserRouter>
     </ThemeProvider>
   );
 }
